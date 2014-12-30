@@ -298,7 +298,7 @@ This key is used for namespacing:
 ];
 ~~~
 
-We can add metadata:
+We can add [metadata](http://emberjs.com/guides/models/handling-metadata/):
 
 ~~~ php
 // Item with Meta
@@ -324,7 +324,7 @@ We can add metadata:
 ];
 ~~~
 
-And now for the difference with the `JsonApiSerializer`: The `EmberSerializer` doesn't wrap the results in a "linked" array. Instead, it pulls all included resources to the top level.
+And now for the difference with the `JsonApiSerializer`: The `EmberSerializer` doesn't wrap the results in a "linked" array. Instead, it pulls all included resources to the top level. Note that for Ember to understand this, you will need to place relationship keys in your `Transformers`.
 
 ~~~ php
 // Item with included resource
