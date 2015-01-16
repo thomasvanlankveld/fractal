@@ -53,20 +53,30 @@ class JsonApiSerializer extends ArraySerializer
     {
         $serializedData = array();
         $linkedIds = array();
+
         foreach ($data as $value) {
-            foreach ($value as $includeKey => $includeValue) {
-                foreach ($includeValue[$includeKey] as $itemValue) {
-                    if (!array_key_exists('id', $itemValue)) {
-                        $serializedData[$includeKey][] = $itemValue;
+            foreach ($value as $includeCollection) {
+
+                // Get resource key
+                $includeKey = array_keys($includeCollection)[0];
+
+                // If the collection is empty, move along
+                if (empty($includeCollection[$includeKey])) {
+                    continue;
+                }
+
+                foreach ($includeCollection[$includeKey] as $item) {
+                    if (!array_key_exists('id', $item)) {
+                        $serializedData[$includeKey][] = $item;
                         continue;
                     }
 
-                    $itemId = $itemValue['id'];
+                    $itemId = $item['id'];
                     if (!empty($linkedIds[$includeKey]) && in_array($itemId, $linkedIds[$includeKey], true)) {
                         continue;
                     }
 
-                    $serializedData[$includeKey][] = $itemValue;
+                    $serializedData[$includeKey][] = $item;
                     $linkedIds[$includeKey][] = $itemId;
                 }
             }
