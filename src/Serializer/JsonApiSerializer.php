@@ -53,21 +53,54 @@ class JsonApiSerializer extends ArraySerializer
     {
         $serializedData = array();
         $linkedIds = array();
+
+        // Don't ask
         foreach ($data as $value) {
-            foreach ($value as $includeKey => $includeValue) {
-                foreach ($includeValue[$includeKey] as $itemValue) {
-                    if (!array_key_exists('id', $itemValue)) {
-                        $serializedData[$includeKey][] = $itemValue;
+            foreach ($value as $collections) {
+
+                // Put linked collections into serializedData
+                if (isset($collections['linked'])) {
+                    foreach ($collections['linked'] as $key => $collection) {
+
+                        // If the collection already existed in serializedData
+                        if (isset($serializedData[$key])) {
+                            $serializedData[$key] = array_merge($serializedData[$key], $collection);
+                            continue;
+                        }
+
+                        // If the collection didn't existed yet
+                        $serializedData[$key] = $collection;
+                    }
+                    unset($collections['linked']);
+                }
+
+                // Serialize each collection
+                foreach ($collections as $collectionKey => $collection) {
+
+                    // If the collection is empty, move along
+                    if (empty($collection)) {
                         continue;
                     }
 
-                    $itemId = $itemValue['id'];
-                    if (!empty($linkedIds[$includeKey]) && in_array($itemId, $linkedIds[$includeKey], true)) {
-                        continue;
-                    }
+                    // Add every item in the collection to serializedData
+                    foreach ($collection as $item) {
 
-                    $serializedData[$includeKey][] = $itemValue;
-                    $linkedIds[$includeKey][] = $itemId;
+                        // Add item without id
+                        if (!array_key_exists('id', $item)) {
+                            $serializedData[$collectionKey][] = $item;
+                            continue;
+                        }
+
+                        // Don't add item if it's already in the collection
+                        $itemId = $item['id'];
+                        if (!empty($linkedIds[$collectionKey]) && in_array($itemId, $linkedIds[$collectionKey], true)) {
+                            continue;
+                        }
+
+                        // Add new item
+                        $serializedData[$collectionKey][] = $item;
+                        $linkedIds[$collectionKey][] = $itemId;
+                    }
                 }
             }
         }
