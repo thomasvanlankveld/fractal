@@ -292,8 +292,8 @@ class Scope
      *
      * @internal
      *
-     * @param TransformerAbstract|callable $transformer
-     * @param mixed                        $data
+     * @param TransformerInterface|callable $transformer
+     * @param mixed                         $data
      *
      * @return array
      */
@@ -325,12 +325,12 @@ class Scope
      *
      * @internal
      *
-     * @param \League\Fractal\TransformerAbstract $transformer
-     * @param mixed                               $data
+     * @param \League\Fractal\TransformerInterface $transformer
+     * @param mixed                                $data
      *
      * @return array
      */
-    protected function fireIncludedTransformers($transformer, $data)
+    protected function fireIncludedTransformers(TransformerInterface $transformer, $data)
     {
         $this->availableIncludes = $transformer->getAvailableIncludes();
 
@@ -342,13 +342,13 @@ class Scope
      *
      * @internal
      *
-     * @param TransformerAbstract|callable $transformer
+     * @param TransformerInterface|callable $transformer
      *
      * @return bool
      */
     protected function transformerHasIncludes($transformer)
     {
-        if (! $transformer instanceof TransformerAbstract) {
+        if (! $transformer instanceof TransformerInterface) {
             return false;
         }
 
