@@ -23,7 +23,7 @@ use League\Fractal\Resource\ResourceAbstract;
  * the self::$availableIncludes property available. Extend it and add a `transform()`
  * method to transform any default or included data into a basic array.
  */
-abstract class TransformerAbstract
+abstract class TransformerAbstract implements TransformerInterface
 {
     /**
      * Resources that can be included if requested.
@@ -238,9 +238,9 @@ abstract class TransformerAbstract
     /**
      * Create a new item resource object.
      *
-     * @param mixed                        $data
-     * @param TransformerAbstract|callable $transformer
-     * @param string                       $resourceKey
+     * @param mixed                         $data
+     * @param TransformerInterface|callable $transformer
+     * @param string                        $resourceKey
      *
      * @return Item
      */
@@ -252,9 +252,9 @@ abstract class TransformerAbstract
     /**
      * Create a new collection resource object.
      *
-     * @param mixed                        $data
-     * @param TransformerAbstract|callable $transformer
-     * @param string                       $resourceKey
+     * @param mixed                         $data
+     * @param TransformerInterface|callable $transformer
+     * @param string                        $resourceKey
      *
      * @return Collection
      */
