@@ -58,9 +58,17 @@ class JsonApiSerializer extends ArraySerializer
         foreach ($data as $value) {
             foreach ($value as $collections) {
 
-                // Put linked collections back into serializedData
+                // Put linked collections into serializedData
                 if (isset($collections['linked'])) {
                     foreach ($collections['linked'] as $key => $collection) {
+
+                        // If the collection already existed in serializedData
+                        if (isset($serializedData[$key])) {
+                            $serializedData[$key] = array_merge($serializedData[$key], $collection);
+                            continue;
+                        }
+
+                        // If the collection didn't existed yet
                         $serializedData[$key] = $collection;
                     }
                     unset($collections['linked']);
