@@ -3,7 +3,7 @@
 /*
  * This file is part of the League\Fractal package.
  *
- * (c) Phil Sturgeon <me@philsturgeon.uk>
+ * (c) Thomas van Lankveld <thomas.van.lankveld@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ namespace League\Fractal\Serializer;
 
 use League\Fractal\Resource\ResourceInterface;
 
-class JsonApiSerializer extends ArraySerializer
+class EmberSerializer extends ArraySerializer
 {
     /**
      * Serialize a collection.
@@ -58,22 +58,6 @@ class JsonApiSerializer extends ArraySerializer
         foreach ($data as $value) {
             foreach ($value as $collections) {
 
-                // Put linked collections into serializedData
-                if (isset($collections['linked'])) {
-                    foreach ($collections['linked'] as $key => $collection) {
-
-                        // If the collection already existed in serializedData
-                        if (isset($serializedData[$key])) {
-                            $serializedData[$key] = array_merge($serializedData[$key], $collection);
-                            continue;
-                        }
-
-                        // If the collection didn't existed yet
-                        $serializedData[$key] = $collection;
-                    }
-                    unset($collections['linked']);
-                }
-
                 // Serialize each collection
                 foreach ($collections as $collectionKey => $collection) {
 
@@ -105,7 +89,7 @@ class JsonApiSerializer extends ArraySerializer
             }
         }
 
-        return empty($serializedData) ? array() : array('linked' => $serializedData);
+        return empty($serializedData) ? array() : $serializedData;
     }
 
     /**

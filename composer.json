@@ -1,5 +1,5 @@
 {
-    "name": "league/fractal",
+    "name": "thomasvanlankveld/fractal",
     "description": "Handle the output of complex data structures ready for JSON output.",
     "keywords": [
         "league",
